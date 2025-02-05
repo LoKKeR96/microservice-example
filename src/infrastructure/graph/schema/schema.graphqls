@@ -1,0 +1,16 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type Message {
+	text: String
+	uuid: String! 
+}
+
+type Query {
+  messages: [Message!]!
+}
+
+type Mutation {
+  login(username: String!, password: String!): String!
+}

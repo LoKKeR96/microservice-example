@@ -28,6 +28,9 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,target=./,source=./src \
     CGO_ENABLED=0 GOARCH=$TARGETARCH go build -o /bin/server .
 
+## For production use this to remove debug info if necessary
+## go build -ldflags "-s -w".
+
 ################################################################################
 # Create a new stage for running the application that contains the minimal
 # runtime dependencies for the application. This often uses a different base

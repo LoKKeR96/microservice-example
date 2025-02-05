@@ -2,12 +2,15 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"net/http"
 
 	"github.com/lokker96/microservice_example/infrastructure/container"
 	"github.com/lokker96/microservice_example/infrastructure/route"
 )
+
+const defaultPort = "8080"
 
 // The main function - entry point of the application
 func main() {
@@ -17,14 +20,15 @@ func main() {
 		log.Fatal(err) // If there's an error, log it and terminate
 	}
 
-	// Configuring the server and initializing routes
-	server := http.Server{
-		Addr:    ":8080",          // Set the address on which the server will listen
-		Handler: route.Routes(*c), // Set up the routes using the created container
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = defaultPort
 	}
 
+	http.Handle("/", route.Routes(*c))
+
 	// Start the server
-	if err := server.ListenAndServe(); err != nil {
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatalf("server failed: %v", err) // If there's an error starting the server, log it and terminate
 	}
 }
