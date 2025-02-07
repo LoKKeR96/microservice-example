@@ -13,7 +13,7 @@ This repository gives an overview of how you could structure a containerised RES
     * [Application](#application)
     * [Domain](#domain)
     * [Persistence](#persistence)
-5. [TODOs][#todos]
+5. [TODOs](#todos)
 
 
 ## Intentions
