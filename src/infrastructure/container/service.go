@@ -2,6 +2,7 @@ package container
 
 import (
 	"context"
+	"os"
 
 	"github.com/lokker96/microservice_example/application/command"
 	"github.com/lokker96/microservice_example/application/query"
@@ -15,6 +16,7 @@ var _ Services = &Container{}
 type Services interface {
 	GetMessageRepository(ctx context.Context) repository.MessageRepository
 
+	GetUserAuthenticationService() service.UserAuthenticationService
 	GetMessageCreatorService(ctx context.Context) service.MessageCreator
 	GetMessageEditorService(ctx context.Context) service.MessageEditor
 
@@ -33,6 +35,9 @@ func (c *Container) GetMessageRepository(ctx context.Context) repository.Message
 }
 
 // Service
+func (c *Container) GetUserAuthenticationService() service.UserAuthenticationService {
+	return service.NewUserAuthenticationService(os.Getenv("SECRET_AUTH_KEY"))
+}
 
 func (c *Container) GetMessageCreatorService(ctx context.Context) service.MessageCreator {
 	return service.NewMessageCreator(ctx, c.GetMessageRepository(ctx))
