@@ -11,7 +11,7 @@ import (
 	"github.com/lokker96/microservice_example/infrastructure/container"
 	"github.com/lokker96/microservice_example/infrastructure/controller"
 	"github.com/lokker96/microservice_example/infrastructure/graph"
-	"github.com/lokker96/microservice_example/infrastructure/graph/resolvers"
+	"github.com/lokker96/microservice_example/infrastructure/graph/resolver"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	middleware "github.com/lokker96/microservice_example/infrastructure/http"
