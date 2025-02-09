@@ -25,5 +25,8 @@ kubectl apply -f kubernetes/deployments/server-deployment.yaml
 kubectl apply -f kubernetes/services/postgres-db-service.yaml
 kubectl apply -f kubernetes/services/server-service.yaml
 
+# Set the Docker environment to user Docker daemon again if needed
+# eval $(minikube docker-env --unset)
+
 # Expose the services to host machine
 minikube tunnel 
