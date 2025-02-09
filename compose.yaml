@@ -9,12 +9,12 @@ services:
     secrets:
       - db-password
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=messages
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-      - POSTGRES_PORT=5432
-      - POSTGRES_HOST=postgres-db
-      - SECRET_AUTH_KEY=lokker96
+      POSTGRES_USER: testingUser
+      POSTGRES_DB: messages
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: postgres-db
+      SECRET_AUTH_KEY: lokker96
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -33,9 +33,9 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=testingUser
-      - POSTGRES_DB=messages
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+      POSTGRES_USER: testingUser
+      POSTGRES_DB: messages
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
     ports:
       - 5432:5432
     expose:

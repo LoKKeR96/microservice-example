@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+        - name: server
+          image: microservice-example-server
+          imagePullPolicy: Never
+          args:
+            - /app/server
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: POSTGRES_DB
+              value: messages
+            - name: POSTGRES_HOST
+              value: postgres-db
+            - name: POSTGRES_PASSWORD_FILE
+              value: /run/secrets/microservice_example/db-password
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: testingUser
+            - name: SECRET_AUTH_KEY
+              value: lokker96
+          volumeMounts:
+            - mountPath: /run/secrets/microservice_example
+              name: db-password
+      restartPolicy: Always
+      volumes:
+        - name: db-password
+          secret:
+            items:
+              - key: db-password
+                path: db-password
+            secretName: db-password

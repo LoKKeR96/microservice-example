@@ -1,24 +1,31 @@
 # Example code for DDD microservice architecture in Go
-This repository gives an overview of how you could structure a containerised RESTful and/or GraphQL-Application written in Go following a DDD and CQRS approach. It uses gqlgen to generate necessary GraphQL server files, Echo as the HTTP server and framework, gorm for ORM data handling and mapping to DB. A complete list of used Tools and Frameworks can be found later in this README.
+This repository gives an overview of how you could structure a containerised RESTful and/or GraphQL-Application written in Go following a DDD and CQRS approach. It uses gqlgen to generate necessary GraphQL server files, Echo as the HTTP server and framework, gorm for ORM data handling and mapping to DB. Two container orchestration configurations are implemented (Docker Compose and Kubernetes) which provide more flexibility in case scalability is an important requirement.
+
+A complete list of the Tools and Frameworks used can be found later in this README.
 
 
 ## Contents
 1. [Intentions](#intentions)
 2. [Getting Started](#getting-started)
     * [Noteworthy things that should be considered while developing](#noteworthy-things-that-should-be-considered-while-developing)
-3. [Frameworks and Tools](#frameworks-and-tools)
-4. [Core Concepts](#core-concepts)
+3. [Golang Frameworks and Tools](#golang-frameworks-and-tools)
+4. [Other tools](#other-tools)
+5. [Core Concepts](#core-concepts)
     * [Domain Driven Design Architecture](#domain-driven-design-architecture)
     * [Echo](#echo)
     * [Application](#application)
     * [Domain](#domain)
     * [Persistence](#persistence)
-5. [TODOs](#todos)
+6. [Docker Compose](#docker-compose)
+7. [Kubernetes](#kubernetes)
+8. [TODOs](#todos)
 
 
 ## Intentions
 * Providing an example project that can be used as boilerplate for starting up a project
-* Demonstrating the used core-concepts for well-structuring a Go application 
+* Demonstrating the used core-concepts for well-structuring a Go application
+* Demonstrating proficiency with GraphQL and RESTful API protocols
+* Demonstrating proficiency with Docker and Kubernetes orchestration tools
 * Learning from mutual feedback and improve this approach
 
 
@@ -27,7 +34,9 @@ This repository gives an overview of how you could structure a containerised RES
 
 * Generate the GraphQL-Server and Resolver-Interfaces by running `go run github.com/99designs/gqlgen generate` in your project directory
 
-* Starting up the stack using docker compose
+* Build the server image using `docker compose build --no-cache server'
+
+* Starting up the stack using docker compose or kubernetes
 
 * Visit `localhost:8080/playground` for getting started with GraphQL API
 
@@ -42,7 +51,7 @@ This repository gives an overview of how you could structure a containerised RES
 * New Actions inside the schema do not lead gqlgen to add them to your resolvers. You are responsible for implement them on your own (The interface containing all necessary functions can be found in `src/infrastructure/graph/server_generated.go`).
 
 
-## Frameworks and Tools
+## Golang Frameworks and Tools
 |Framework/Tool|Description|
 |---|---|
 |[gorm.io/gorm](https://pkg.go.dev/gorm.io/gorm)|ORM library used to map and manage entities in the database|
@@ -53,11 +62,18 @@ This repository gives an overview of how you could structure a containerised RES
 |[labstack/echo/v4](https://github.com/labstack/echo/v4)|HTTP server and framework to serve APIs, manage middleware and respond to HTTP requests|
 |[go-playground/validator/v10](https://github.com/go-playground/validator/v10)|Used to validate data from HTTP requests before processing them|
 
+## Other tools
+These are tools that are required to download in order to build Docker images and run Kubernetes network locally.
+
+|Tool|Description|
+|---|---|
+|[Docker Desktop](https://www.docker.com/products/docker-desktop/)|Containerisation software for building and running container images|
+|[minikube](https://github.com/kubernetes/minikube)|Lightweight Kubernetes implementation for fast local development|
 
 ## Core Concepts
 
 ### Domain Driven Design Architecture
-The microservice architecture is structured as shown below where the data flow from an HTTP request follows the graph from top down.
+The microservice architecture is structured as shown below where the data flow from an HTTP request follows the graph from top down in a DDD fashion.
 
 <p align="center">
     <img src="./docs/DDD_structure.png" alt="ddd overview" />
@@ -124,8 +140,23 @@ Similar to repositories, services should always be described through an interfac
 ### Persistence
 Implements repositories interfaces to provide access to permanent data stores hosted within the microservice itself (cache) or databases.
 
+## Docker Compose
+Docker Compose is used here for container orchestration as a quick option to test and develop the codebase. It can also be used for simple applications where there's no need to scale the application on multiple nodes. The architecture consists of two containers/services, one for PostgreSQL and another for the Golang server. A secret to share the database password across the containers has also been implemneted with the password stored in the `db/password.txt` file. 
+
+You can quickly test it using `docker compose up`.
+
+## Kubernetes
+A Kubernetes container architecture is implemented under the `kubernetes`-directory which can be used alternatively of Docker Compose.
+This architecture can be expanded and used for projects where scaling and flexibility are mission critical.
+
+The architecture implemeted here is similar to the one used in Docker and it requires loading the server image built from Docker.
+
+The implementation can be started using the `start_kubernetes.sh` script which setups the volumes, secrets, deployments and services. This script uses 'minikube' as it provides a simple Kubernetes cluster with a single node for development purposes. More information can be found in the script.
+
+Other scripts have been provided for stopping all services and closing down the minikube VM and cluster using `stop_kubernetes.sh`. There is also an additional script called `clean_up.sh` inside the kubernetes folder that can be used to quickly remove the deployments, volumes and services for development ease.
+
+
 ## TODOs
 
 * Finish implementing graphql types, queries and modifications
 * Implement authorisation check in graphql
-* Document docker stack
