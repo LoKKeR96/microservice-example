@@ -1,4 +1,4 @@
-package mysql
+package postgresql
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 )
 
 type messageRepository struct {
-	ctx context.Context
+	ctx context.Context // Intregation with middleware for handling timeouts and more
 	db  *gorm.DB
 }
 

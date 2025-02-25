@@ -8,7 +8,7 @@ import (
 	"github.com/lokker96/microservice_example/application/query"
 	"github.com/lokker96/microservice_example/domain/repository"
 	"github.com/lokker96/microservice_example/domain/service"
-	"github.com/lokker96/microservice_example/infrastructure/persistence/mysql"
+	"github.com/lokker96/microservice_example/infrastructure/persistence/postgresql"
 )
 
 var _ Services = &Container{}
@@ -31,7 +31,7 @@ type Services interface {
 // Repository
 
 func (c *Container) GetMessageRepository(ctx context.Context) repository.MessageRepository {
-	return mysql.NewMessageRepository(ctx, c.db)
+	return postgresql.NewMessageRepository(ctx, c.db)
 }
 
 // Service
