@@ -46,6 +46,8 @@ func (cs *CreateMessage) Create(ctx echo.Context, c container.Container) error {
 	if err := createMessageCommand.Do(commandRequest); err != nil {
 		// handle custom domain error
 		if errors.Is(err, &domainErr.MessageAlreadyExists{}) {
+			// Ideally we should use a logger for errors and communicate
+			// something more appropriate externally.
 			return ctx.JSON(http.StatusConflict, err.Error())
 		}
 		return ctx.JSON(http.StatusInternalServerError, "error on creating message")

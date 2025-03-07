@@ -12,12 +12,13 @@ import (
 
 // Define the Container structure
 type Container struct {
-	ctx context.Context // Context for the container
+	Ctx context.Context // Context for the container
 	db  *gorm.DB        // Database connection instance
 }
 
 // NewContainer function creates and returns a new Container instance
 func NewContainer() (*Container, error) {
+	ctx := context.Background()
 
 	dbPassword, err := os.ReadFile(os.Getenv("POSTGRES_PASSWORD_FILE"))
 	if err != nil {
@@ -43,6 +44,7 @@ func NewContainer() (*Container, error) {
 
 	// Return a new Container instance with the database connection set
 	return &Container{
-		db: dbConnection,
+		db:  dbConnection,
+		Ctx: ctx,
 	}, nil
 }

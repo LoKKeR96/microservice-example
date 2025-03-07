@@ -87,32 +87,32 @@ The framework used to serve HTTP requests. Here the request will be served to ei
 Here is where the routes (API endpoints) are defined and an handler and middleware is associated with them.
 
 #### Resolver
-Resolvers are GraphQL construct for handling requests.
-They are described in the `schema.graphql` file.
+Resolvers are GraphQL construct for handling requests. They are described in the `schema.graphql` file.
 An interface for each type of action (Query, Mutation) is created through gqlgen.
 This interface holds all possible user-actions and needs to be implemented.
 In this example, the implementation is done in the `src/infrasctructure/graph/resolver/resolver.go` file.
 For larger projects it might be a good idea to use multiple files instead.
 
-* **Logging**: Logs everything interesting happening in data-transmission. In this example gqlgen should perform this aspect of logging.
+* **Logging**: GraphQL logs everything interesting happening in data-transmission. In this example gqlgen should perform this aspect of logging.
 
-* **Errors**: Errors from the domain should be passed through from the application and domain layer.
+* **Errors**: Errors from the domain should be passed through from the application layer and reported to the user.
 
 #### Controller
 Here live the controllers of the RESTful APIs implemented.
 
-* **Logging**: Logs everything interesting happening in data-transmission. 
+* **Logging**: Ideally we should implement a logger but for this project but I have avoided it to keep things simple. Might implement in the future.
 
-* **Errors**: Errors from the domain should be passed through from the application and domain layer.
-
+* **Errors**: Errors from the domain should be passed through from the application layer and reported to the user.
 
 ### Application
 Creates and fetches data from the domain layer. Here CQRS is implemented to separate into queries and commands such that the former implements only read requests with no side effects while the latter implements read requests that have side effects and write requests.
 
-
 ### Domain
 Responsible for representing concepts for the business, information about the business situation, and business logic. Within the domain there are repositories which define how data is accessed from the domain layer.
 
+* **Logging:** Should not provide logic-based, but technical logging (e.g. connection-failures, timeouts).
+
+* **Errors:** Should provide sensible domain based errors that user can interpret to avoid issues with the next requests. Not too much technical details, no sensitive informations.
 
 #### Repository
 The Repository layer is holding logic for interactions with any kind of data store. This could be a database or streaming-service.
@@ -121,7 +121,7 @@ A repository is always defined through an interface before implementing it. This
 
 * **Logging:** Should not provide logic-based, but technical logging (e.g. connection-failures, timeouts). A not found database-row is mostly not a technical error, even if your db-driver returns an error in this case.
 
-* **Errors:** Errors returned by this layer are not concerned for being seen by the end-user. Errors could contain sensible informations.
+* **Errors:** Errors returned by this layer are not concerned for being seen by the end-user. Errors could contain sensible informations, we should filter this out.
 
 
 #### Service
@@ -132,9 +132,9 @@ A service could also provide functions used by other services, e.g. retrieving c
 
 Similar to repositories, services should always be described through an interface. So you could mock it during tests. They live inside the `service`-directory.
 
-* **Logging**: Responsible for logic-based logging. Should log faulty actions (retrieving not existing entities, try accessing data without permission)
+* **Logging**: Responsible for logic-based logging. Should log faulty actions (retrieving not existing entities, try accessing data without permission).
 
-* **Errors**: Errors should be non-technical and suited for the end-user. Not to much technical details, no sensible informations.
+* **Errors**: Errors should be non-technical and suited for the end-user. Not too much technical details, no sensitive informations.
 
 
 ### Persistence

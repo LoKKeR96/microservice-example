@@ -11,8 +11,6 @@ import (
 	"github.com/lokker96/microservice_example/infrastructure/persistence/postgresql"
 )
 
-var _ Services = &Container{}
-
 type Services interface {
 	GetMessageRepository(ctx context.Context) repository.MessageRepository
 
