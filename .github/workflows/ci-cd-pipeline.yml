@@ -1,0 +1,29 @@
+name: CI/CD Pipeline
+
+on:  
+  push:  
+    branches: [ main ]  
+  pull_request:  
+    branches: [ main ]  
+
+jobs:  
+  build:  
+    runs-on: ubuntu-latest  
+    steps:  
+      - name: Checkout Repository  
+        uses: actions/checkout@v3  
+
+      - name: Set up Docker
+        run: |
+          docker --version
+          docker-compose --version
+
+      - name: Build and Start Services
+        run: docker-compose up -d --build --no-cache
+
+      - name: Run Tests in Golang Microservice
+        run: |
+          docker-compose exec -T server go test ./...
+
+      - name: Stop and Clean Up
+        run: docker-compose down
