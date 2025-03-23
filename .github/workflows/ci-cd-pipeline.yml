@@ -16,14 +16,14 @@ jobs:
       - name: Set up Docker
         run: |
           docker --version
-          docker compose --version
+          docker compose version
 
       - name: Build and Start Services
-        run: docker-compose up -d --build --no-cache
+        run: docker compose up -d --build --no-cache
 
       - name: Run Tests in Golang Microservice
         run: |
-          docker-compose exec -T server go test ./...
+          docker compose exec -T server go test ./...
 
       - name: Stop and Clean Up
-        run: docker-compose down
+        run: docker compose down
