@@ -2,9 +2,9 @@ services:
 
   server:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
-      target: final_dev
+      context: ../
+      dockerfile: .ci/Dockerfile.ci
+      target: final_ci
     ports:
       - 8080:8080
     secrets:
@@ -50,5 +50,5 @@ volumes:
   db-data:
 secrets:
   db-password:
-    file: db/password.txt
+    file: ../db/password.txt
 
