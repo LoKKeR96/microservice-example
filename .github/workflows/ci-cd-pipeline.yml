@@ -27,7 +27,7 @@ jobs:
           docker compose --progress=plain build --no-cache
           docker compose up -d
 
-      - name: Run Tests in Golang Microservice
+      - name: Run Unit Tests inside server microservice
         run: |
           docker compose exec -T server bash -c "cd /usr/src/; go test ./..."
 
