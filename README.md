@@ -1,5 +1,6 @@
 # Example code for DDD microservice architecture in Go
 This repository gives an overview of how you could structure a containerised RESTful and/or GraphQL-Application written in Go following a DDD and CQRS approach. It uses gqlgen to generate necessary GraphQL server files, Echo as the HTTP server and framework, gorm for ORM data handling and mapping to DB. Two container orchestration configurations are implemented (Docker Compose and Kubernetes) which provide more flexibility in case scalability is an important requirement.
+A CI approach is also implemented making use of GitHub Actions to run tests when a merge into branch `main` is done and when a pull request is created.
 
 A complete list of the Tools and Frameworks used can be found later in this README.
 
@@ -18,7 +19,8 @@ A complete list of the Tools and Frameworks used can be found later in this READ
     * [Persistence](#persistence)
 6. [Docker Compose](#docker-compose)
 7. [Kubernetes](#kubernetes)
-8. [TODOs](#todos)
+8. [CI/CD Pipeline](#ci/cd-pipeline)
+9. [TODOs](#todos)
 
 
 ## Intentions
@@ -155,6 +157,14 @@ The implementation can be started using the `start_kubernetes.sh` script which s
 
 Other scripts have been provided for stopping all services and closing down the minikube VM and cluster using `stop_kubernetes.sh`. There is also an additional script called `clean_up.sh` inside the kubernetes folder that can be used to quickly remove the deployments, volumes and services for development ease.
 
+## CI/CD Pipeline
+A continous integration (CI) approach is implemented using GitHub Actions to run a CI pipeline. In the `.github/workflows` folder a configuration yaml file has been written to use the docker compose configuration files under the folder `.ci`.
+The dockerfile here is the same as `Dockerfile.dev` but it is using a docker image with golang binaries. This allows the CI to use the `go` binary to run the unit tests.
+
+Other approaces could have been used. For example, I could have installed the `go` binary in the CI runner machine directly as part of the CI process and run the tests on the machine instead of inside the container. This approach is faster because it doesn't require to spin up the containers. This would be a better approach for unit tests and when functional tests will be implemented, I will separate the unit tests run from the functional tests run and only run the latter in the container since functional tests require the microservice to be running.
+
+No approach for continous deployment is implemented as this is a demo project and it is not delivered anywhere.
+I have provided a sample file at `.github/workflows/deploy.yml.sample` which demonstrates how a docker image is built and then pushed to DockerHub and then the image is pulled in the remote machine through SSH and the app is redeployed.
 
 ## TODOs
 
