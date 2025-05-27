@@ -48,3 +48,7 @@ func NewContainer() (*Container, error) {
 		Ctx: ctx,
 	}, nil
 }
+
+func (c *Container) HandleShutdown() {
+	// Add here any memory cleanup method
+}
