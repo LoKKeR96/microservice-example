@@ -153,9 +153,9 @@ This architecture can be expanded and used for projects where scaling and flexib
 
 The architecture implemeted here is similar to the one used in Docker and it requires loading the server image built from Docker.
 
-The implementation can be started using the `start_kubernetes.sh` script which setups the volumes, secrets, deployments and services. This script uses 'minikube' as it provides a simple Kubernetes cluster with a single node for development purposes. More information can be found in the script.
+The kubernetes implementation can be started using the script at `kubernetes/start_kubernetes.sh` which setups the volumes, secrets, deployments and services. This script uses 'minikube' as it provides a simple Kubernetes cluster with a single node for development purposes. More information can be found in the script.
 
-Other scripts have been provided for stopping all services and closing down the minikube VM and cluster using `stop_kubernetes.sh`. There is also an additional script called `clean_up.sh` inside the kubernetes folder that can be used to quickly remove the deployments, volumes and services for development ease.
+Other scripts have been provided for stopping all services and closing down the minikube VM and cluster using `kubernetes/stop_kubernetes.sh`. There is also an additional script called `clean_up.sh` inside the kubernetes folder that can be used to fully remove all deployments, volumes and services that might be left.
 
 ## CI/CD Pipeline
 A continous integration (CI) approach is implemented using GitHub Actions to run a CI pipeline. In the `.github/workflows` folder a configuration yaml file has been written to use the docker compose configuration files under the folder `.ci`.
@@ -170,3 +170,4 @@ I have provided a sample file at `.github/workflows/deploy.yml.sample` which dem
 
 * Finish implementing graphql types, queries and modifications
 * Implement authorisation check in graphql
+* Implement Observability through Open Telemetry

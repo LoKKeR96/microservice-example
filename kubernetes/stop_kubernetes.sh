@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sh ./kubernetes/clean_up.sh
+sh ./clean_up.sh
 
 minikube stop
 

@@ -17,7 +17,7 @@ import (
 	middleware "github.com/lokker96/microservice_example/infrastructure/http"
 )
 
-func Routes(c container.Container) *echo.Echo {
+func SetupRoutes(c container.Container) *echo.Echo {
 	e := echo.New()
 
 	// Setting up GraphQL config
