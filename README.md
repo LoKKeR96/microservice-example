@@ -158,10 +158,9 @@ The kubernetes implementation can be started using the script at `kubernetes/sta
 Other scripts have been provided for stopping all services and closing down the minikube VM and cluster using `kubernetes/stop_kubernetes.sh`. There is also an additional script called `clean_up.sh` inside the kubernetes folder that can be used to fully remove all deployments, volumes and services that might be left.
 
 ## CI/CD Pipeline
-A continous integration (CI) approach is implemented using GitHub Actions to run a CI pipeline. In the `.github/workflows` folder a configuration yaml file has been written to use the docker compose configuration files under the folder `.ci`.
-The dockerfile here is the same as `Dockerfile.dev` but it is using a docker image with golang binaries. This allows the CI to use the `go` binary to run the unit tests.
+A continous integration (CI) approach is implemented using GitHub Actions to run a CI pipeline. In the `.github/workflows` folder a configuration yaml file has been written to use the docker compose and Dockerfile configuration files in the project. The approach here is to use the same Dockerfile and docker compose files for both local development and CI.
 
-Other approaces could have been used. For example, I could have installed the `go` binary in the CI runner machine directly as part of the CI process and run the tests on the machine instead of inside the container. This approach is faster because it doesn't require to spin up the containers. This would be a better approach for unit tests and when functional tests will be implemented, I will separate the unit tests run from the functional tests run and only run the latter in the container since functional tests require the microservice to be running.
+Other approaces could have been used. For example, I could have installed the `go` binary in the CI runner machine directly as part of the CI process and run the tests on the machine instead of inside the container. This approach is faster because it doesn't require to spin up the containers. This would be a faster approach but utilising the docker caches will allow for fast CI runs even when running containers. 
 
 No approach for continous deployment is implemented as this is a demo project and it is not delivered anywhere.
 I have provided a sample file at `.github/workflows/deploy.yml.sample` which demonstrates how a docker image is built and then pushed to DockerHub and then the image is pulled in the remote machine through SSH and the app is redeployed.
